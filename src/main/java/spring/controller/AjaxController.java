@@ -30,14 +30,19 @@ public class AjaxController {
 	@RequestMapping(value="/ajax",produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String action(
-			@RequestParam(value = "sno", required = false, defaultValue = "register") String sno,
-			@RequestParam(value = "sid", required = false, defaultValue = "register") String sid,
+			@RequestParam(value = "sno", required = false, defaultValue = "") String sno,
+			@RequestParam(value = "sid", required = false, defaultValue = "") String sid,
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setCharacterEncoding("UTF-8");
 		System.out.println(sid);
 		Student s = new Student();
 		s=studentservice.queryStudent(sno);
-		boolean idVerify = new IdVerify().idCardVerification(sid);
+		boolean idVerify=false;
+		if(sid.equals("")||sid==null) {
+			idVerify=false;
+		}else {
+		idVerify = new IdVerify().idCardVerification(sid);
+		}
 		if(s.getSno()==null&&idVerify==true) {
 			return "成功";
 		}else if(idVerify==false) {
