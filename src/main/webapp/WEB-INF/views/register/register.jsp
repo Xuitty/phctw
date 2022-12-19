@@ -27,16 +27,17 @@
 				name="smail" id="smail"><br> <br>
 			身分證字號:&nbsp;<input type="text" name="sid" id="sid"><br> <br> <br> <br>
 			<div id="submit" style="display: none">
-				<input type="hidden" name="buttonAction" value="register"> <input
+				<input type="hidden" name="buttonAction" value="register"> <input id="submit"
 					type="submit" value="送出">
 			</div>
 
 
 		</form>
+		<img src="js/watame-hololive.gif" alt="null"></img>
 	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-	<script src="/js/script.js"></script>
+	<script src="js/script.js"></script>
 
 	
 
