@@ -107,7 +107,7 @@ public class StudentServiceImpl implements StudentService {
 		Boolean r = dao.activeAccount(sno);
 		return r;
 	}
-
+	@Transactional
 	@Override
 	public Boolean forgetPassword(String sno, String smail) {
 		Student s = dao.queryStudent(sno);
@@ -124,7 +124,7 @@ public class StudentServiceImpl implements StudentService {
 			return false;
 		}
 	}
-	
+	@Transactional
 	@Override
 	public Boolean resetPassword(String sno,String oldpassword,String newpassword) {
 		if(queryStudent(sno).getSpwd().equals(new MD5Tools().string2MD5(oldpassword))) {

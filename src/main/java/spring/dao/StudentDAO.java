@@ -9,6 +9,7 @@ import javax.persistence.Query;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,12 +26,14 @@ public class StudentDAO {
 	public void setTemplate(JdbcTemplate template) {
 		this.template = template;
 	}
-	
-	
+
 	@Autowired
 	SessionFactory sessionFactory;
+
+	Session session;
 	
-	
+	Transaction tr;
+
 //	static Session getSession()
 //	{
 ////		Configuration conn=new Configuration().configure();
@@ -57,8 +60,7 @@ public class StudentDAO {
 //
 //			}
 //		});
-		
-			Session session = sessionFactory.getCurrentSession();
+
 //			Query query = session.createNativeQuery("insert into student (sno,sname,sbday,ssex,smail,spwd,sid) values(:sno,:sname,:sbday,:ssex,:smail,:spwd,:sid)");
 //			query.setParameter("sno", s.getSno());
 //			query.setParameter("sname", s.getSname());
@@ -68,10 +70,14 @@ public class StudentDAO {
 //			query.setParameter("spwd", s.getSpwd());
 //			query.setParameter("sid", s.getSid());
 //			session.beginTransaction();
-			session.persist(s);
+		session = sessionFactory.getCurrentSession();
+//		tr=session.getTransaction();
+//		tr.begin();
+		session.persist(s);
+//		tr.rollback();
 //			session.getTransaction().commit();
 //			session.close();
-			return true;
+		return true;
 	}
 
 	public List<Student> selectStudent() {
@@ -80,29 +86,42 @@ public class StudentDAO {
 	}
 
 	public Boolean updateStudent(Student student) {
-		Student s = queryStudent(student.getSno());
-		String sql = "update student set sno=?,sname=?,sbday=?,ssex=?,smail=?,spwd=?,sid=? WHERE sno=?;";
-		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
-			@Override
-			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-				ps.setString(1, student.getSno());
-				ps.setString(2, student.getSname() == null ? s.getSname() : student.getSname());
-				ps.setString(3, student.getSbday() == null ? s.getSbday() : student.getSbday());
-				ps.setInt(4, student.getSsex() == -1 ? s.getSsex() : student.getSsex());
-				ps.setString(5, student.getSmail() == null ? s.getSmail() : student.getSmail());
-				ps.setString(6, student.getSpwd() == null ? s.getSpwd() : student.getSpwd());
-				ps.setString(7, student.getSid() == null ? s.getSid() : student.getSid());
-				ps.setString(8, student.getSno());
-
-				int r = ps.executeUpdate();
-				if (r == 1) {
-					return true;
-				} else {
-					return false;
-				}
-
-			}
-		});
+//		Student s = queryStudent(student.getSno());
+//		String sql = "update student set sno=?,sname=?,sbday=?,ssex=?,smail=?,spwd=?,sid=? WHERE sno=?;";
+//		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
+//			@Override
+//			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+//				ps.setString(1, student.getSno());
+//				ps.setString(2, student.getSname() == null ? s.getSname() : student.getSname());
+//				ps.setString(3, student.getSbday() == null ? s.getSbday() : student.getSbday());
+//				ps.setInt(4, student.getSsex() == -1 ? s.getSsex() : student.getSsex());
+//				ps.setString(5, student.getSmail() == null ? s.getSmail() : student.getSmail());
+//				ps.setString(6, student.getSpwd() == null ? s.getSpwd() : student.getSpwd());
+//				ps.setString(7, student.getSid() == null ? s.getSid() : student.getSid());
+//				ps.setString(8, student.getSno());
+//
+//				int r = ps.executeUpdate();
+//				if (r == 1) {
+//					return true;
+//				} else {
+//					return false;
+//				}
+//
+//			}
+//		});
+		session = sessionFactory.getCurrentSession();
+		Student s = session.get(Student.class, student.getSno());
+		s.setSno((student.getSno()==null)?s.getSno():student.getSno());
+		s.setSname((student.getSname()==null)?s.getSname():student.getSname());
+		s.setSbday((student.getSbday()==null)?s.getSbday():student.getSbday());
+		s.setSmail((student.getSmail()==null)?s.getSmail():student.getSmail());
+		s.setSpwd((student.getSpwd()==null)?s.getSpwd():student.getSpwd());
+		s.setSid((student.getSid()==null)?s.getSid():student.getSid());
+		s.setSsex((student.getSsex()==-1)?s.getSsex():student.getSsex());
+		s.setActive((student.getActive()==-1)?s.getActive():student.getActive());
+		session.clear();
+		session.merge(s);
+		return true;
 	}
 
 	public Boolean deleteStudent(String sno) {
@@ -131,7 +150,7 @@ public class StudentDAO {
 //
 //			}
 //		});
-		
+
 		return sessionFactory.getCurrentSession().get(Student.class, sno);
 	}
 
@@ -162,7 +181,7 @@ public class StudentDAO {
 				ps.setString(1, sno);
 				ps.setString(2, verify);
 
-				return ps.executeUpdate()==1?true:false;
+				return ps.executeUpdate() == 1 ? true : false;
 
 			}
 		});
@@ -177,7 +196,7 @@ public class StudentDAO {
 
 				ps.setString(1, sno);
 
-				return ps.executeUpdate()==1?true:false;
+				return ps.executeUpdate() == 1 ? true : false;
 
 			}
 		});
@@ -210,7 +229,7 @@ public class StudentDAO {
 				ps.setInt(1, 1);
 				ps.setString(2, sno);
 
-				return ps.executeUpdate()==1?true:false;
+				return ps.executeUpdate() == 1 ? true : false;
 
 			}
 		});

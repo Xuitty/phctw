@@ -4,11 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.stereotype.Component;
 
 @Entity
-@Table(name = "student")
+@Table(name = "student",uniqueConstraints = {@UniqueConstraint(columnNames = {"sno"})})
 @Component
 
 public class Student {
@@ -28,7 +29,7 @@ public class Student {
 	@Column(name = "ssex")
 	private int ssex = -1;
 	@Column(name = "active")
-	private int active = 0;
+	private int active = -1;
 
 	public Student() {
 	}
