@@ -1,25 +1,17 @@
 package spring.controller;
 
-import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition;
-
 import spring.bean.Student;
 import spring.service.StudentService;
-import spring.service.StudentServiceImpl;
 import spring.tools.IdVerify;
+
 
 @Controller
 public class AjaxController {
@@ -34,16 +26,16 @@ public class AjaxController {
 			@RequestParam(value = "sid", required = false, defaultValue = "") String sid,
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setCharacterEncoding("UTF-8");
-		System.out.println(sid);
-		Student s = new Student();
-		s=studentservice.queryStudent(sno);
+//		System.out.println(sno);
+		Student s=studentservice.queryStudent(sno);
+//		System.out.println(s.toString());
 		boolean idVerify=false;
 		if(sid.equals("")||sid==null) {
 			idVerify=false;
 		}else {
 		idVerify = new IdVerify().idCardVerification(sid);
 		}
-		if(s.getSno()==null&&idVerify==true) {
+		if(s==null&&idVerify==true) {
 			return "成功";
 		}else if(idVerify==false) {
 		

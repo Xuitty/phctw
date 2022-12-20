@@ -38,17 +38,29 @@
 			value="password"></property> -->
 	</bean>
 
-	<bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource" ref="ds"></property>
+	<bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate"> <property 
+		name="dataSource" ref="ds"></property> </bean>
+	<bean id="dao" class="spring.dao.StudentDAO"> <property name="template" 
+		ref="jt"></property> </bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="ds" />
+		<property name="packagesToScan" value="spring.bean" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
 	</bean>
-	<bean id="dao" class="spring.dao.StudentDAO">
-		<property name="template" ref="jt"></property>
+
+	<tx:annotation-driven />
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-
-
-
-
-	<!-- <bean id="ssi" class="spring.service.StudentServiceImpl"> <property 
-		name="ssi" ref="dao"></property> </bean> -->
 
 </beans>

@@ -19,6 +19,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class StudentServiceImpl implements StudentService {
 		ArrayList<Student> r = (ArrayList<Student>) dao.selectStudent();
 		return r;
 	}
-
+	@Transactional
 	@Override
 	public Boolean insertStudent(Student student) {
 //		StudentDAO s = new StudentDAO();
@@ -63,7 +64,7 @@ public class StudentServiceImpl implements StudentService {
 		boolean r = dao.deleteStudent(sno);
 		return r;
 	}
-
+	@Transactional
 	@Override
 	public Student queryStudent(String sno) {
 //		StudentDAO s = new StudentDAO();
