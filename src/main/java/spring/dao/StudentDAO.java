@@ -3,6 +3,7 @@ package spring.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -33,7 +34,7 @@ public class StudentDAO {
 
 	Session session;
 
-	Transaction tr;
+//	Transaction tr;
 
 //	static Session getSession()
 //	{
@@ -111,17 +112,17 @@ public class StudentDAO {
 //			}
 //		});
 		session = sessionFactory.getCurrentSession();
-		Student s = session.get(Student.class, student.getSno());
-		s.setSno((student.getSno() == null) ? s.getSno() : student.getSno());
-		s.setSname((student.getSname() == null) ? s.getSname() : student.getSname());
-		s.setSbday((student.getSbday() == null) ? s.getSbday() : student.getSbday());
-		s.setSmail((student.getSmail() == null) ? s.getSmail() : student.getSmail());
-		s.setSpwd((student.getSpwd() == null) ? s.getSpwd() : student.getSpwd());
-		s.setSid((student.getSid() == null) ? s.getSid() : student.getSid());
-		s.setSsex((student.getSsex() == -1) ? s.getSsex() : student.getSsex());
-		s.setActive((student.getActive() == -1) ? s.getActive() : student.getActive());
-		session.clear();
-		session.merge(s);
+//		Student s = session.get(Student.class, student.getSno());
+//		s.setSno((student.getSno() == null) ? s.getSno() : student.getSno());
+//		s.setSname((student.getSname() == null) ? s.getSname() : student.getSname());
+//		s.setSbday((student.getSbday() == null) ? s.getSbday() : student.getSbday());
+//		s.setSmail((student.getSmail() == null) ? s.getSmail() : student.getSmail());
+//		s.setSpwd((student.getSpwd() == null) ? s.getSpwd() : student.getSpwd());
+//		s.setSid((student.getSid() == null) ? s.getSid() : student.getSid());
+//		s.setSsex((student.getSsex() == -1) ? s.getSsex() : student.getSsex());
+//		s.setActive((student.getActive() == -1) ? s.getActive() : student.getActive());
+//		session.clear();
+		session.merge(student);
 		return true;
 	}
 
@@ -151,17 +152,8 @@ public class StudentDAO {
 //
 //			}
 //		});
-		Student s = null;
-		try {
-			session = sessionFactory.openSession();
-			tr = session.getTransaction();
-			s = session.get(Student.class, sno);
-			tr.commit();
-		} catch (Exception e) {
-			tr.rollback();
-		} finally {
-			session.close();
-		}
+		session = sessionFactory.getCurrentSession();
+		Student s = session.get(Student.class, sno);
 		return s;
 	}
 
@@ -182,102 +174,96 @@ public class StudentDAO {
 //			}
 //		});
 		String hql = "from Student where sno like :sno and spwd like :spwd and active = 1";
-		List l = null;
-		try {
-			session = sessionFactory.openSession();
-			tr = session.beginTransaction();
-			Query query = session.createQuery(hql);
-			query.setParameter("sno", acc);
-			query.setParameter("spwd", pass);
-			l=query.getResultList();
-			tr.commit();
-		} catch (Exception e) {
-			tr.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		if(l.isEmpty()||l==null) {
+		List<Object> l = null;
+		session = sessionFactory.getCurrentSession();
+		Query query = session.createQuery(hql);
+		query.setParameter("sno", acc);
+		query.setParameter("spwd", pass);
+		l = query.getResultList();
+		if (l.isEmpty() || l == null) {
 			return false;
-		}else {
-		return true;
+		} else {
+			return true;
 		}
 	}
 
 	public Boolean writeVerify(String sno, String verify) {
-		String sql = "replace into verify (sno,verify) values(?,?)";
-		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
-			@Override
-			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-
-				ps.setString(1, sno);
-				ps.setString(2, verify);
-
-				return ps.executeUpdate() == 1 ? true : false;
-
-			}
-		});
-//		try {
-//		session=sessionFactory.openSession();
-//		tr=session.getTransaction();
-//		Verify v = new Verify(sno,verify);
-//		session.merge(v);
-//		tr.commit();
-//		}catch(Exception e){
-//			tr.rollback();
-//			e.printStackTrace();
-//		}finally {
-//			session.close();
-//		}
-//		return true;
+//		String sql = "replace into verify (sno,verify) values(?,?)";
+//		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
+//			@Override
+//			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+//
+//				ps.setString(1, sno);
+//				ps.setString(2, verify);
+//
+//				return ps.executeUpdate() == 1 ? true : false;
+//
+//			}
+//		});
+		session=sessionFactory.getCurrentSession();
+		Verify v = new Verify(sno,verify);
+		System.out.println(v.toString());
+		session.merge(v);
+		return true;
 
 	}
 
 	public Boolean deleteVerify(String sno) {
-		String sql = "delete from verify where sno = ?";
-		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
-			@Override
-			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-
-				ps.setString(1, sno);
-
-				return ps.executeUpdate() == 1 ? true : false;
-
-			}
-		});
+//		String sql = "delete from verify where sno = ?";
+//		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
+//			@Override
+//			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+//
+//				ps.setString(1, sno);
+//
+//				return ps.executeUpdate() == 1 ? true : false;
+//
+//			}
+//		});
+		session = sessionFactory.getCurrentSession();
+		Verify v = new Verify(sno,null);
+		session.delete(v);
+		return true;
 	}
 
 	public String queryVerify(String sno) {
-		String sql = "select verify from verify where sno = ?";
-		return template.execute(sql, new PreparedStatementCallback<String>() {
-			@Override
-			public String doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-				ps.setString(1, sno);
-				ResultSet rs = ps.executeQuery();
-				String verify = "";
-				while (rs.next()) {
-					verify = rs.getString(1);
-				}
-				return verify;
-
-			}
-		});
+//		String sql = "select verify from verify where sno = ?";
+//		return template.execute(sql, new PreparedStatementCallback<String>() {
+//			@Override
+//			public String doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+//				ps.setString(1, sno);
+//				ResultSet rs = ps.executeQuery();
+//				String verify = "";
+//				while (rs.next()) {
+//					verify = rs.getString(1);
+//				}
+//				return verify;
+//
+//			}
+//		});
+		session = sessionFactory.getCurrentSession();
+		return session.get(Verify.class, sno).getVerify();
 
 	}
 
 	public Boolean activeAccount(String sno) {
-		String sql = "update student set active=? where sno=?";
-		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
-			@Override
-			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-
-				ps.setInt(1, 1);
-				ps.setString(2, sno);
-
-				return ps.executeUpdate() == 1 ? true : false;
-
-			}
-		});
+//		String sql = "update student set active=? where sno=?";
+//		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
+//			@Override
+//			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+//
+//				ps.setInt(1, 1);
+//				ps.setString(2, sno);
+//
+//				return ps.executeUpdate() == 1 ? true : false;
+//
+//			}
+//		});
+		session = sessionFactory.getCurrentSession();
+		Student s = queryStudent(sno);
+		s.setActive(1);
+		session.merge(s);
+		return true;
 	}
 
 	@Deprecated

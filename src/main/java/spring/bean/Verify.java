@@ -16,10 +16,8 @@ import org.springframework.stereotype.Component;
 
 public class Verify {
 
-	
 	@Id
 	@Column
-//	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String sno;
 	@Column
 	private String verify;
@@ -28,6 +26,8 @@ public class Verify {
 	}
 
 	public Verify(String sno, String verify) {
+		this.sno = sno;
+		this.verify = verify;
 	}
 
 	public String getSno() {

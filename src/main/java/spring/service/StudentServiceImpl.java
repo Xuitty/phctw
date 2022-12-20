@@ -50,7 +50,7 @@ public class StudentServiceImpl implements StudentService {
 		boolean r = dao.insertStudent(student);
 		return r;
 	}
-
+	@Transactional
 	@Override
 	public Boolean updateStudent(Student student) {
 //		StudentDAO s = new StudentDAO();
@@ -79,7 +79,7 @@ public class StudentServiceImpl implements StudentService {
 		Boolean r = dao.loginStudent(acc, pass);
 		return r;
 	}
-
+	@Transactional
 	@Override
 	public Boolean writeVerify(Student student) {
 		String verify = verifyGen();
@@ -87,21 +87,21 @@ public class StudentServiceImpl implements StudentService {
 		Boolean r = dao.writeVerify(student.getSno(), verify);
 		return r;
 	}
-
+	@Transactional
 	@Override
 	public Boolean deleteVerify(String sno) {
 		Boolean r = dao.deleteVerify(sno);
 		return r;
 
 	}
-
+	@Transactional
 	@Override
 	public String queryVerify(String sno) {
 		String r = dao.queryVerify(sno);
 		return r;
 
 	}
-
+	@Transactional
 	@Override
 	public Boolean activeAccount(String sno) {
 		Boolean r = dao.activeAccount(sno);
@@ -113,8 +113,6 @@ public class StudentServiceImpl implements StudentService {
 		Student s = dao.queryStudent(sno);
 		if (s.getSmail().equals(smail)) {
 			String newPassword = newPasswordGen();
-			s = new Student();
-			s.setSno(sno);
 			s.setSpwd(new MD5Tools().string2MD5(newPassword));
 			Boolean r = dao.updateStudent(s);
 			System.out.println(r);
@@ -128,7 +126,9 @@ public class StudentServiceImpl implements StudentService {
 	@Override//*******************
 	public Boolean resetPassword(String sno,String oldpassword,String newpassword) {
 		if(queryStudent(sno).getSpwd().equals(new MD5Tools().string2MD5(oldpassword))) {
-			updateStudent(new Student(sno,new MD5Tools().string2MD5(newpassword)));
+			Student s = queryStudent(sno);
+			s.setSpwd(new MD5Tools().string2MD5(newpassword));
+			updateStudent(s);
 			return true;
 		}
 		return false;
