@@ -34,7 +34,7 @@ public class RegisterController {
 		System.out.println("in RegisterController");
 
 		if (action.equals("register")) {
-			Student s = new Student(sno, sname, sbday, Integer.parseInt(ssex), smail, spwd, sid);
+			Student s = new Student(sno, sname, sbday, Integer.parseInt(ssex), smail, spwd, sid,0);
 			studentservice.insertStudent(s);
 			studentservice.writeVerify(s);
 			ModelAndView mv = new ModelAndView("register/verify");
@@ -59,7 +59,7 @@ public class RegisterController {
 				return mv;
 			}
 		} else if (action.equals("resend")) {
-			Student s = new Student(sno, sname, sbday, ssex==null?-1:Integer.parseInt(ssex), smail, spwd, sid);
+			Student s = new Student(sno, sname, sbday, ssex==null?-1:Integer.parseInt(ssex), smail, spwd, sid,0);
 			s.setSname(studentservice.queryStudent(sno).getSname());
 			studentservice.writeVerify(s);
 			ModelAndView mv = new ModelAndView("register/resend");

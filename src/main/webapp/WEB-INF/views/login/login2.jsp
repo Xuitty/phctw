@@ -7,15 +7,19 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>學生資料管理系統</title>
+<style>
 
+
+</style>
 </head>
 <body>
 
-	<center>
+	
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col"></div>
 				<div class="col-3"><br><br>
+					<center>
 		<h2>登入系統</h2>
 		<br><br>
 		<h2 style="color: red">${message}</h2>
@@ -27,28 +31,33 @@
 			</form> -->
 
 			<form action="login" method="post">
+				
 				<div class="mb-3">
-				  <label for="exampleInputEmail1" class="form-label">帳號(學號)</label>
+				  <label for="exampleInputEmail1">帳號(學號)</label>
 				  <input type="text" class="form-control" id="exampleInputEmail1" name="acc" aria-describedby="emailHelp">
 				  <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+				
 				</div>
 				<div class="mb-3">
-				  <label for="exampleInputPassword1" class="form-label">密碼</label>
+				  <label for="exampleInputPassword1">密碼</label>
 				  <input type="password" name="pass" class="form-control" id="exampleInputPassword1">
 				</div>
+			
 				<br><br>
 				<button type="submit" name="buttonAction" value="登入" class="btn btn-primary">登入</button>
 				<button type="submit" name="buttonAction" value="註冊" class="btn btn-outline-primary">註冊</button>
+				
 			  </form>
 <br><br>
 			<button class="btn btn-outline-secondary value="忘記密碼"
 				onclick="location.href='/spring/login?buttonAction=forgetPasswordLogin';">忘記密碼?</button>
 				<button type="button" class="btn btn-outline-secondary value="重發驗證信"
 				onclick="location.href='/spring/register?buttonAction=resendLogin';">重發驗證信</button>
+			</center>
 			</div>
 				<div class="col"></div>
 			</div>
 		</div>
-	</center>
+	
 </body>
 </html>
