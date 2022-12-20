@@ -71,7 +71,7 @@ public class StudentServiceImpl implements StudentService {
 		Student r = dao.queryStudent(sno);
 		return r;
 	}
-
+	@Transactional
 	@Override
 	public Boolean loginStudent(String acc, String pass) {
 		// TODO Auto-generated method stub
@@ -125,7 +125,7 @@ public class StudentServiceImpl implements StudentService {
 		}
 	}
 	@Transactional
-	@Override
+	@Override//*******************
 	public Boolean resetPassword(String sno,String oldpassword,String newpassword) {
 		if(queryStudent(sno).getSpwd().equals(new MD5Tools().string2MD5(oldpassword))) {
 			updateStudent(new Student(sno,new MD5Tools().string2MD5(newpassword)));

@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.stereotype.Repository;
 
 import spring.bean.Student;
+import spring.bean.Verify;
 
 @Repository
 public class StudentDAO {
@@ -31,7 +32,7 @@ public class StudentDAO {
 	SessionFactory sessionFactory;
 
 	Session session;
-	
+
 	Transaction tr;
 
 //	static Session getSession()
@@ -111,14 +112,14 @@ public class StudentDAO {
 //		});
 		session = sessionFactory.getCurrentSession();
 		Student s = session.get(Student.class, student.getSno());
-		s.setSno((student.getSno()==null)?s.getSno():student.getSno());
-		s.setSname((student.getSname()==null)?s.getSname():student.getSname());
-		s.setSbday((student.getSbday()==null)?s.getSbday():student.getSbday());
-		s.setSmail((student.getSmail()==null)?s.getSmail():student.getSmail());
-		s.setSpwd((student.getSpwd()==null)?s.getSpwd():student.getSpwd());
-		s.setSid((student.getSid()==null)?s.getSid():student.getSid());
-		s.setSsex((student.getSsex()==-1)?s.getSsex():student.getSsex());
-		s.setActive((student.getActive()==-1)?s.getActive():student.getActive());
+		s.setSno((student.getSno() == null) ? s.getSno() : student.getSno());
+		s.setSname((student.getSname() == null) ? s.getSname() : student.getSname());
+		s.setSbday((student.getSbday() == null) ? s.getSbday() : student.getSbday());
+		s.setSmail((student.getSmail() == null) ? s.getSmail() : student.getSmail());
+		s.setSpwd((student.getSpwd() == null) ? s.getSpwd() : student.getSpwd());
+		s.setSid((student.getSid() == null) ? s.getSid() : student.getSid());
+		s.setSsex((student.getSsex() == -1) ? s.getSsex() : student.getSsex());
+		s.setActive((student.getActive() == -1) ? s.getActive() : student.getActive());
 		session.clear();
 		session.merge(s);
 		return true;
@@ -150,26 +151,57 @@ public class StudentDAO {
 //
 //			}
 //		});
-
-		return sessionFactory.getCurrentSession().get(Student.class, sno);
+		Student s = null;
+		try {
+			session = sessionFactory.openSession();
+			tr = session.getTransaction();
+			s = session.get(Student.class, sno);
+			tr.commit();
+		} catch (Exception e) {
+			tr.rollback();
+		} finally {
+			session.close();
+		}
+		return s;
 	}
 
 	public Boolean loginStudent(String acc, String pass) {
-		String sql = "select * from student where sno like ? and spwd like ? and active = 1";
-		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
-			@Override
-			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-				ps.setString(1, acc);
-				ps.setString(2, pass);
-				ResultSet rs = ps.executeQuery();
-				while (rs.next()) {
-					return true;
-				}
-
-				return false;
-
-			}
-		});
+//		String sql = "select * from student where sno like ? and spwd like ? and active = 1";
+//		return template.execute(sql, new PreparedStatementCallback<Boolean>() {
+//			@Override
+//			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+//				ps.setString(1, acc);
+//				ps.setString(2, pass);
+//				ResultSet rs = ps.executeQuery();
+//				while (rs.next()) {
+//					return true;
+//				}
+//
+//				return false;
+//
+//			}
+//		});
+		String hql = "from Student where sno like :sno and spwd like :spwd and active = 1";
+		List l = null;
+		try {
+			session = sessionFactory.openSession();
+			tr = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setParameter("sno", acc);
+			query.setParameter("spwd", pass);
+			l=query.getResultList();
+			tr.commit();
+		} catch (Exception e) {
+			tr.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		if(l.isEmpty()||l==null) {
+			return false;
+		}else {
+		return true;
+		}
 	}
 
 	public Boolean writeVerify(String sno, String verify) {
@@ -185,6 +217,19 @@ public class StudentDAO {
 
 			}
 		});
+//		try {
+//		session=sessionFactory.openSession();
+//		tr=session.getTransaction();
+//		Verify v = new Verify(sno,verify);
+//		session.merge(v);
+//		tr.commit();
+//		}catch(Exception e){
+//			tr.rollback();
+//			e.printStackTrace();
+//		}finally {
+//			session.close();
+//		}
+//		return true;
 
 	}
 
