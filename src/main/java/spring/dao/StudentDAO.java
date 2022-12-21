@@ -60,7 +60,7 @@ public class StudentDAO {
 
 	public Boolean loginStudent(String acc, String pass) {
 		String hql = "from Student where sno like :sno and spwd like :spwd and active = 1";
-		List<Object> l = null;
+		List<?> l = null;
 		session = sessionFactory.getCurrentSession();
 		Query query = session.createQuery(hql);
 		query.setParameter("sno", acc);
