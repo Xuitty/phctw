@@ -32,15 +32,15 @@
 
 			<form action="login" method="post">
 				
-				<div class="mb-3">
-				  <label for="exampleInputEmail1">帳號(學號)</label>
-				  <input type="text" class="form-control" id="exampleInputEmail1" name="acc" aria-describedby="emailHelp">
+				<div class="form-floating mb-3">
+					<input type="text" class="form-control" id="exampleInputEmail1" name="acc" aria-describedby="emailHelp" placeholder="A000001">
+					<label for="exampleInputEmail1">帳號(學號)</label>
 				  <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
 				
 				</div>
-				<div class="mb-3">
+				<div class="form-floating mb-3">
+					<input type="password" name="pass" class="form-control" id="exampleInputPassword1" placeholder="A000001">
 				  <label for="exampleInputPassword1">密碼</label>
-				  <input type="password" name="pass" class="form-control" id="exampleInputPassword1">
 				</div>
 			
 				<br><br>
