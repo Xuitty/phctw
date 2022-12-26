@@ -83,7 +83,12 @@ public class LoginAction extends ActionSupport implements ServletRequestAware, S
 		if (buttonAction.equals("註冊")) {
 			message = "註冊";
 			return REGISTER;
-		} else {
+		}
+		if (buttonAction.equals("註冊")) {
+			message = "註冊";
+			return REGISTER;
+		}
+		else {
 			message = "錯誤";
 			return ERROR;
 		}
