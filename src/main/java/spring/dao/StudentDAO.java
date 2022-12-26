@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import spring.bean.Student;
 import spring.bean.Verify;
+import spring.tools.MD5Tools;
 
 @Repository
 public class StudentDAO {
@@ -26,9 +27,8 @@ public class StudentDAO {
 
 	@Autowired
 	SessionFactory sessionFactory;
-
 	Session session;
-
+	
 
 	public Boolean insertStudent(Student s) {
 
@@ -101,6 +101,31 @@ public class StudentDAO {
 		s.setActive(1);
 		session.merge(s);
 		return true;
+	}
+	
+	public String addCookie(String sno,String salt) {
+		session = sessionFactory.getCurrentSession();
+		Student s = queryStudent(sno);
+		System.out.println(s);
+		s.setCookie(new MD5Tools().string2MD5(sno+salt));
+		s.setSalt(salt);
+		session.merge(s);
+		return s.getCookie();
+	}
+	
+	public String queryCookie(String cookie) {
+		session = sessionFactory.getCurrentSession();
+		String hql = "from Student where cookie like :cookie";
+		List<?> l = null;
+		Query query = session.createQuery(hql);
+		query.setParameter("cookie", cookie);
+		l = query.getResultList();
+		if (l.isEmpty() || l == null) {
+			return "";
+		} else {
+			Student student = (Student) l.get(0);
+			return student.getSno();
+		}
 	}
 
 	@Deprecated

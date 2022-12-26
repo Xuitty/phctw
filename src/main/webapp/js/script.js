@@ -36,9 +36,10 @@ function ajax() {
     dataType: "text",
     error: function () {},
     success: function (data) {
-      if (data == "成功") {
+      console.log(data);
+      if (data == "success") {
         a = 1;
-      } else if (data == "身分證驗證錯誤") {
+      } else if (data == "id") {
         a = 2;
       } else {
         a = 0;

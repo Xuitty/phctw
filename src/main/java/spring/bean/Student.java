@@ -9,7 +9,7 @@ import javax.persistence.UniqueConstraint;
 import org.springframework.stereotype.Component;
 
 @Entity
-@Table(name = "student",uniqueConstraints = {@UniqueConstraint(columnNames = {"sno"})})
+@Table(name = "student", uniqueConstraints = { @UniqueConstraint(columnNames = { "sno" }) })
 @Component
 
 public class Student {
@@ -26,6 +26,10 @@ public class Student {
 	private String spwd;
 	@Column(name = "sid")
 	private String sid;
+	@Column(name = "cookie")
+	private String cookie;
+	@Column(name = "salt")
+	private String salt;
 	@Column(name = "ssex")
 	private int ssex = -1;
 	@Column(name = "active")
@@ -39,7 +43,8 @@ public class Student {
 		this.spwd = spwd;
 	}
 
-	public Student(String sno, String sname, String sbday, int ssex, String smail, String spwd, String sid,int active) {
+	public Student(String sno, String sname, String sbday, int ssex, String smail, String spwd, String sid,
+			int active) {
 		this.sno = sno;
 		this.sname = sname;
 		this.sbday = sbday;
@@ -109,8 +114,6 @@ public class Student {
 	public void setSid(String sid) {
 		this.sid = sid;
 	}
-	
-	
 
 	public int getActive() {
 		return active;
@@ -120,12 +123,30 @@ public class Student {
 		this.active = active;
 	}
 
+	public String getCookie() {
+		return cookie;
+	}
+
+	public void setCookie(String cookie) {
+		this.cookie = cookie;
+	}
+	
+	
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
 	@Override
 	public String toString() {
 		return "Student [sno=" + sno + ", sname=" + sname + ", sbday=" + sbday + ", smail=" + smail + ", spwd=" + spwd
-				+ ", sid=" + sid + ", ssex=" + ssex + ", active=" + active + "]";
+				+ ", sid=" + sid + ", cookie=" + cookie + ", salt=" + salt + ", ssex=" + ssex + ", active=" + active
+				+ "]";
 	}
 
-	
 
 }

@@ -123,7 +123,7 @@ public class StudentServiceImpl implements StudentService {
 		}
 	}
 	@Transactional
-	@Override//*******************
+	@Override
 	public Boolean resetPassword(String sno,String oldpassword,String newpassword) {
 		if(queryStudent(sno).getSpwd().equals(new MD5Tools().string2MD5(oldpassword))) {
 			Student s = queryStudent(sno);
@@ -133,7 +133,22 @@ public class StudentServiceImpl implements StudentService {
 		}
 		return false;
 	}
+	
+	
 
+	@Override
+	@Transactional
+	public String addCookie(String sno) {
+		String r = dao.addCookie(sno,verifyGen());
+		return r;
+	}
+	
+	@Override
+	@Transactional
+	public String queryCookie(String cookie) {
+		String r = dao.queryCookie(cookie);
+		return r;
+	}
 	public int[] add(int amount) {
 //		StudentServiceImpl ssi = new StudentServiceImpl();
 		int err = 0;
@@ -430,5 +445,6 @@ public class StudentServiceImpl implements StudentService {
 			e.printStackTrace();
 		}
 	}
+	
 
 }

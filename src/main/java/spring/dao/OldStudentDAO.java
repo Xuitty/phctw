@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -129,6 +130,7 @@ public class OldStudentDAO {
 	public Boolean deleteStudent(String sno) {
 		return null;
 	}
+	
 
 	public Student queryStudent(String sno) {
 //		String sql = "select * from student where sno like ?";
