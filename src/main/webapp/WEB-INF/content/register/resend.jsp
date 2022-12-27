@@ -9,7 +9,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   </head>
   <body id="body">
     <center>
-      <h2 style="color: red;">${message}</h2>
+      <h2 style="color: red">${message}</h2>
       <h2>重發驗證信請填帳號信箱<br /><br />收信後填入帳號跟驗證碼</h2>
       <br />
       <div>
@@ -56,6 +56,14 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       document.getElementById("buttonVerify").style.display = "none";
       document.getElementById("buttonResend").style.display = "none";
       $("#body").keyup(function () {
+        detect();
+      });
+
+      $("#body").mousedown(function () {
+        detect();
+      });
+
+      function detect() {
         a = $("#sno").val().length;
         b = $("#smail").val().length;
         c = $("#verify").val().length;
@@ -79,7 +87,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
             document.getElementById("buttonResend").style.display = "none";
           }
         }
-      });
+      }
     </script>
   </body>
 </html>

@@ -84,6 +84,9 @@ public class RegisterAction extends ActionSupport implements ServletRequestAware
 			s.setSname(studentService.queryStudent(sno).getSname());
 			studentService.writeVerify(s);
 			return "resend";
+		}
+		if (buttonAction.equals("resendLogin")) {
+			return "resend";
 		} else {
 			message = "錯誤";
 			return ERROR;
