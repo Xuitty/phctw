@@ -32,8 +32,8 @@ pageEncoding="UTF-8"%>
         />
       </div>
 
-      <p><button onmousemove="ajax()">測試</button></p>
-      ${sno}
+      <!-- <p><button onmousemove="ajax()">測試</button></p> -->
+      <!-- ${sno} -->
     </center>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <!-- <script>

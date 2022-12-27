@@ -68,7 +68,7 @@ public class RegisterAction extends ActionSupport implements ServletRequestAware
 		if (buttonAction.equals("verify")) {
 			if (studentService.queryVerify(sno).equals(verify)) {
 				studentService.activeAccount(sno);
-
+				studentService.deleteVerify(sno);
 				sno_encrypted = studentService.addCookie(sno);
 				Cookie c = new Cookie("username", sno_encrypted);
 				c.setMaxAge(3600 * 24 * 7);

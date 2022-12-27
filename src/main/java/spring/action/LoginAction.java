@@ -16,11 +16,13 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.dispatcher.Parameter.Request;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.json.annotations.JSON;
 import org.apache.struts2.json.annotations.JSONParameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -50,11 +52,17 @@ public class LoginAction extends ActionSupport implements ServletRequestAware, S
 	private String sno_encrypted;
 	private String message;
 	private String buttonAction;
+	private String oldPassword;
+	private String newPassword;
+	private String confirmNewPassword;
 
 	@Action(value = "login", results = {
 //			@Result(type = "redirectAction", params = { "actionName", "main"}, name = "success"),
 			@Result(location = "main/main.jsp", name = "success"), @Result(name = "error", location = "failed.jsp"),
-			@Result(name = "register", location = "register/register.jsp") })
+			@Result(name = "register", location = "register/register.jsp"),
+			@Result(name = "home", location = "login/login2.jsp"),
+			@Result(name = "forgetpassword", location = "login/forgetPassword.jsp"),
+			@Result(name = "resetpassword", location = "main/resetPassword.jsp") })
 	public String login() {
 		if (buttonAction.equals("登入")) {
 			System.out.println("sno: " + sno + "spwd: " + spwd);
@@ -81,13 +89,44 @@ public class LoginAction extends ActionSupport implements ServletRequestAware, S
 			}
 		}
 		if (buttonAction.equals("註冊")) {
-			message = "註冊";
 			return REGISTER;
 		}
-		if (buttonAction.equals("註冊")) {
-			message = "註冊";
-			return REGISTER;
+		if (buttonAction.equals("forgetPasswordLogin")) {
+			return "forgetpassword";
 		}
+		if (buttonAction.equals("forgetPassword")) {
+			Boolean r = studentService.forgetPassword(sno, smail);
+			if (r == true) {
+				message = "請至信箱收信使用新密碼登入";
+				return "home";
+			} else {
+				message = "無此帳號或信箱";
+				return "forgetpassword";
+			}
+		} else if (buttonAction.equals("mainResetPassword")) {
+			message = "請輸入舊密碼以及欲設定的新密碼";
+			return "resetpassword";
+		} else if (buttonAction.equals("resetPassword")) {
+			System.out.println("old "+oldPassword);
+			System.out.println("new "+newPassword);
+			System.out.println("confirm "+confirmNewPassword);
+			if (!(newPassword.equals(confirmNewPassword))) {
+				message = "新密碼不一致";
+				return "resetpassword";
+			}
+			boolean r = studentService.resetPassword(sno, oldPassword, newPassword);
+			if (r) {
+				message = "修改成功，請使用新密碼登入";
+				Cookie c = new Cookie("username", "");
+				c.setMaxAge(0);
+				response.addCookie(c);
+				return "home";
+			} else {
+				message = "舊密碼驗證錯誤";
+				return "resetpassword";
+			}
+		}
+
 		else {
 			message = "錯誤";
 			return ERROR;
@@ -172,6 +211,30 @@ public class LoginAction extends ActionSupport implements ServletRequestAware, S
 
 	public void setButtonAction(String buttonAction) {
 		this.buttonAction = buttonAction;
+	}
+
+	public String getOldPassword() {
+		return oldPassword;
+	}
+
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
+	public String getConfirmNewPassword() {
+		return confirmNewPassword;
+	}
+
+	public void setConfirmNewPassword(String confirmNewPassword) {
+		this.confirmNewPassword = confirmNewPassword;
 	}
 
 	@Override
