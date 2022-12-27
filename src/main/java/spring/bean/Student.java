@@ -30,6 +30,8 @@ public class Student {
 	private String cookie;
 	@Column(name = "salt")
 	private String salt;
+	@Column(name = "salt_pass")
+	private String salt_pass;
 	@Column(name = "ssex")
 	private int ssex = -1;
 	@Column(name = "active")
@@ -141,12 +143,21 @@ public class Student {
 		this.salt = salt;
 	}
 
+	public String getSalt_pass() {
+		return salt_pass;
+	}
+
+	public void setSalt_pass(String salt_pass) {
+		this.salt_pass = salt_pass;
+	}
+
 	@Override
 	public String toString() {
 		return "Student [sno=" + sno + ", sname=" + sname + ", sbday=" + sbday + ", smail=" + smail + ", spwd=" + spwd
-				+ ", sid=" + sid + ", cookie=" + cookie + ", salt=" + salt + ", ssex=" + ssex + ", active=" + active
-				+ "]";
+				+ ", sid=" + sid + ", cookie=" + cookie + ", salt=" + salt + ", salt_pass=" + salt_pass + ", ssex="
+				+ ssex + ", active=" + active + "]";
 	}
+
 
 
 }

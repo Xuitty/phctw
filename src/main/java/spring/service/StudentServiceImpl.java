@@ -46,7 +46,9 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Boolean insertStudent(Student student) {
 //		StudentDAO s = new StudentDAO();
-		student.setSpwd(md5.string2MD5(student.getSpwd()));
+		String salt = saltGen();
+		student.setSpwd(md5.string2MD5(student.getSpwd()+salt));
+		student.setSalt_pass(salt);
 		boolean r = dao.insertStudent(student);
 		return r;
 	}
@@ -75,7 +77,8 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Boolean loginStudent(String acc, String pass) {
 		// TODO Auto-generated method stub
-		pass = md5.string2MD5(pass);
+		String salt = queryStudent(acc).getSalt_pass();
+		pass = md5.string2MD5(pass+salt);
 		Boolean r = dao.loginStudent(acc, pass);
 		return r;
 	}
@@ -113,7 +116,9 @@ public class StudentServiceImpl implements StudentService {
 		Student s = dao.queryStudent(sno);
 		if (s.getSmail().equals(smail)) {
 			String newPassword = newPasswordGen();
-			s.setSpwd(new MD5Tools().string2MD5(newPassword));
+			String salt = saltGen();
+			s.setSpwd(new MD5Tools().string2MD5(newPassword+salt));
+			s.setSalt_pass(salt);
 			Boolean r = dao.updateStudent(s);
 			System.out.println(r);
 			sendNewPassword(sno, dao.queryStudent(sno).getSmail(), newPassword);
@@ -125,9 +130,11 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	@Override
 	public Boolean resetPassword(String sno,String oldpassword,String newpassword) {
-		if(queryStudent(sno).getSpwd().equals(new MD5Tools().string2MD5(oldpassword))) {
+		if(queryStudent(sno).getSpwd().equals(new MD5Tools().string2MD5(oldpassword+(queryStudent(sno).getSalt_pass())))) {
 			Student s = queryStudent(sno);
-			s.setSpwd(new MD5Tools().string2MD5(newpassword));
+			String salt = saltGen();
+			s.setSpwd(new MD5Tools().string2MD5(newpassword+salt));
+			s.setSalt_pass(salt);
 			updateStudent(s);
 			return true;
 		}
