@@ -26,7 +26,7 @@
 			<div class="col-3">
 				<br> <br>
 				<center>
-					<h2>登入系統 ${sno1}</h2>
+					<h2>登入系統</h2>
 					<br> <br>
 					<h2 style="color: red">${message}</h2>
 					<!-- <form action="login" method="post">

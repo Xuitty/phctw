@@ -68,7 +68,7 @@ public class LoginAction extends ActionSupport implements ServletRequestAware, S
 			System.out.println("sno: " + sno + "spwd: " + spwd);
 			if (sno == null || spwd == null || sno.equals("") || spwd.equals("")) {
 				message = "欄位不可留空";
-				return ERROR;
+				return "home";
 			}
 
 			if (studentService.loginStudent(sno, spwd)) {
@@ -85,7 +85,7 @@ public class LoginAction extends ActionSupport implements ServletRequestAware, S
 				return SUCCESS;
 			} else {
 				message = "帳號密碼錯誤";
-				return ERROR;
+				return "home";
 			}
 		}
 		if (buttonAction.equals("註冊")) {
